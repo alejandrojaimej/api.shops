@@ -1,8 +1,8 @@
 <?php
 // Application middleware
-require_once __DIR__.'/../vendor/autoload.php';
-
 // e.g: $app->add(new \Slim\Csrf\Guard);
+require_once(__DIR__.'/../vendor/palanik/corsslim/CorsSlim.php');
+
 $corsOptions = array(
     "origin" => "*",
     "exposeHeaders" => array("Content-Type", "X-Requested-With", "X-authentication", "X-client",),
