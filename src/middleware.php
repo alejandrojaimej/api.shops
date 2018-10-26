@@ -1,5 +1,6 @@
 <?php
 // Application middleware
+require_once __DIR__.'/vendor/autoload.php';
 
 // e.g: $app->add(new \Slim\Csrf\Guard);
 $corsOptions = array(
