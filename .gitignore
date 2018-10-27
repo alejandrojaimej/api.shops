@@ -2,3 +2,4 @@
 !/logs/README.md
 /vendor
 vendor/palanik/corsslim
+vendor/*
