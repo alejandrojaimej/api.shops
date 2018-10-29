@@ -14,10 +14,9 @@ class Shell extends Model{
     $query = 'SELECT '.$search.' FROM translations WHERE controller=:controller';
     $stm = self::$db->prepare($query);
     $stm->execute(array('controller'=>$controller));
-    $resp = $stm->fetchAll(PDO::FETCH_ASSOC);
     $result = array();
-    foreach($resp as $value){
-      $result[$value[0]] = $value[1];
+    while($row = $stmt->fetch()){
+      $result[$row[0]] = $row[1];
     }
     return $result;
   }
