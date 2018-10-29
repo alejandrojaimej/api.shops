@@ -14,11 +14,7 @@ class Shell extends Model{
     $query = 'SELECT '.$search.' FROM translations WHERE controller=:controller';
     $stm = self::$db->prepare($query);
     $stm->execute(array('controller'=>$controller));
-    $result = array();
-    while($row = $stmt->fetch()){
-      $result[$row['component']] = $row[$lang];
-    }
-    return $result;
+    return $stm->fetchAll(PDO::FETCH_KEY_PAIR);
   }
 }
 ?>
