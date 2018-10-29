@@ -40,3 +40,21 @@ $app->get('/searchLocation/{lang}/{string}', function(Request $request, Response
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);  
 });
+
+
+$app->get('/text/{lang}/{controller}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $shell = loadModel('Shell');
+
+    $result = $shell::getText($args['lang'], $args['controller']);
+    
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
