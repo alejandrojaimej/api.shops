@@ -16,7 +16,7 @@ class Shell extends Model{
     $stm->execute(array('controller'=>$controller));
     $resp = $stm->fetchAll(PDO::FETCH_ASSOC);
     $result = array();
-    foreach($resp as $key => $value){
+    foreach($resp as $value){
       $result[$value[0]] = $value[1];
     }
     return $result;
