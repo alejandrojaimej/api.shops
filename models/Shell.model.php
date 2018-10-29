@@ -16,7 +16,7 @@ class Shell extends Model{
     $stm->execute(array('controller'=>$controller));
     $result = array();
     while($row = $stmt->fetch()){
-      $result[$row[0]] = $row[1];
+      $result[$row['component']] = $row[$lang];
     }
     return $result;
   }
