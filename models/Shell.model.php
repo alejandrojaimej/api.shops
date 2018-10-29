@@ -10,11 +10,16 @@ class Shell extends Model{
    * @param lang: Idioma de los textos
    */
   public static function getText($lang = LANGS[0], $controller = 'login'){
-    $search = 'en, '.$lang;
+    $search = 'component, '.$lang;
     $query = 'SELECT '.$search.' FROM translations WHERE controller=:controller';
     $stm = self::$db->prepare($query);
     $stm->execute(array('controller'=>$controller));
-    return $stm->fetchAll(PDO::FETCH_ASSOC);
+    $resp = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $result = array();
+    foreach($resp as $key => $value){
+      $result[$value[0]] = $value[1];
+    }
+    return $result;
   }
 }
 ?>
