@@ -62,4 +62,4 @@ $app->get('/text/{lang}/{controller}', function(Request $request, Response $resp
 $app->post('login', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $shell = loadModel('Shell');
-}
+});
