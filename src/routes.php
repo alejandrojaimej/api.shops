@@ -59,7 +59,7 @@ $app->get('/text/{lang}/{controller}', function(Request $request, Response $resp
     ->withStatus(200);  
 });
 
-$app->post('login', function(Request $request, Response $response, array $args){
+$app->post('/login', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
