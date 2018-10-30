@@ -61,5 +61,16 @@ $app->get('/text/{lang}/{controller}', function(Request $request, Response $resp
 
 $app->post('login', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
-    $shell = loadModel('Shell');
+    $users = loadModel('Users');
+
+    $result = $users::checkLogin($args['email'], $args['password']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
 });
