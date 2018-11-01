@@ -41,8 +41,9 @@ class Users extends Model{
       $query = 'INSERT INTO users (email, password, active) VALUES (:email, :password, 0)';
       $stm = self::$db->prepare($query);
       try { 
-          self::$db->beginTransaction(); 
-          $stm->execute( array('email' => $email, 'password' => $password) ); 
+          $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+          self::$db->beginTransaction();
+          $stm->execute( array('email' => $email, 'password' => $password_hashed) ); 
           self::$db->commit(); 
           return  self::$db->lastInsertId(); 
       } catch(PDOExecption $e) { 
