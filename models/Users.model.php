@@ -16,6 +16,7 @@ class Users extends Model{
     $stm = self::$db->prepare($query);
     $stm->execute(array('email'=>$email));
     $user = $stm->fetchAll();
+    return $user;
     if( password_verify($password, $user['password']) ){
       return $user['id'];  
     }else{
