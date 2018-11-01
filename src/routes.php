@@ -38,7 +38,8 @@ $app->post('/login', function(Request $request, Response $response){
 
     $response_data = array();
     $response_data['error'] = false; 
-    $response_data['response'] = $result; 
+    //$response_data['response'] = $result; 
+    $response_data['response'] = $vars;
     $response->write(json_encode($response_data));
 
     return $response
