@@ -15,7 +15,7 @@ class Users extends Model{
     $query = 'SELECT * FROM users WHERE email=:email AND active = 1';
     $stm = self::$db->prepare($query);
     $stm->execute(array('email'=>$email));
-    $user = $stmt->fetchAll();
+    $user = $stm->fetchAll();
     if( password_verify($password, $user['password']) ){
       return $user['id'];  
     }else{
