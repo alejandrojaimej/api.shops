@@ -32,7 +32,9 @@ $app->post('/login', function(Request $request, Response $response, array $args)
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::checkLogin($args['email'], $args['password']);
+    $vars = $request->getParsedBody();
+
+    $result = $users::checkLogin($vars['email'], $vars['password']);
 
     $response_data = array();
     $response_data['error'] = false; 
