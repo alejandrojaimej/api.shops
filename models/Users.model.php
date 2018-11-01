@@ -15,7 +15,7 @@ class Users extends Model{
     $query = 'SELECT * FROM users WHERE email=:email AND active = 1';
     $stm = self::$db->prepare($query);
     $stm->execute(array('email'=>$email));
-    $user = $this->stmt->fetchAll();
+    $user = $stmt->fetchAll();
     if( password_verify($password, $user['password']) ){
       return $user['id'];  
     }else{
@@ -41,12 +41,12 @@ class Users extends Model{
       $query = 'INSERT INTO users (email, password, active) VALUES (:email, :password, 0)';
       $stm = self::$db->prepare($query);
       try { 
-          $db->beginTransaction(); 
+          self::$db->beginTransaction(); 
           $stm->execute( array('email' => $email, 'password' => $password) ); 
-          $db->commit(); 
-          return  $db->lastInsertId(); 
+          self::$db->commit(); 
+          return  self::$db->lastInsertId(); 
       } catch(PDOExecption $e) { 
-          $db->rollback(); 
+          self::$db->rollback(); 
           return false;
       } 
     }
