@@ -27,7 +27,7 @@ class Users extends Model{
   /**
    * Inserta un nuevo usuario en la base de datos
    * @param $email -> es un campo unique en la bdd, por lo que puede fallar, de ahí la comprobación
-   * @param $password -> se le pasa encriptada a la api para no enviarla como texto plano por internet... se encripta con la función password_hash() de php
+   * @param $password -> se encripta con password_hash de php
    * @return lastInsertedId() de pdo cuando se ha insertado el usuario, false si ha habido algún error al insertar
    */
   public static function addUser($email = false, $password = false){
