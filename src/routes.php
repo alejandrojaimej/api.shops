@@ -28,7 +28,7 @@ $app->get('/text/{lang}/{controller}', function(Request $request, Response $resp
 /**
  * Comprueba si un par Usuario/Contraseña existe en la base de datos
  */
-$app->post('/login', function(Request $request, Response $response, array $args){
+$app->post('/login', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
