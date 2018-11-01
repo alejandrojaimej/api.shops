@@ -39,7 +39,7 @@ $app->post('/login', function(Request $request, Response $response){
     $response_data = array();
     $response_data['error'] = false; 
     //$response_data['response'] = $result; 
-    $response_data['response'] = $vars;
+    $response_data['response'] = array('email' => $request->getParam("email"), 'password'=>$request->getParam("password"));
     $response->write(json_encode($response_data));
 
     return $response
