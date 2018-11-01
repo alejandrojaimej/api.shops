@@ -11,6 +11,7 @@ class Users extends Model{
    * @return userId si se encuentra al usuario, false si no.
    */
   public static function checkLogin($email = false, $password = false){
+    return array($email, $password);
     if($email === false || empty($email) || $password === false || empty($password)){return false;}
     $query = 'SELECT * FROM users WHERE email=:email AND active = 1';
     $stm = self::$db->prepare($query);
