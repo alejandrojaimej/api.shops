@@ -10,7 +10,7 @@ class Shell extends Model{
    * @param lang: Idioma de los textos
    */
   public static function getText($lang = LANGS[0], $controller = 'login'){
-    $search = 'component, '.$lang;
+    $search = 'component, '.(!in_array($lang) ? LANGS[0] : $lang);
     $query = 'SELECT '.$search.' FROM translations WHERE controller=:controller';
     $stm = self::$db->prepare($query);
     $stm->execute(array('controller'=>$controller));
