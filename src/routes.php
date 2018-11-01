@@ -32,14 +32,11 @@ $app->post('/login', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $vars = $request->getParsedBody();
-
-    $result = $users::checkLogin($vars['email'], $vars['password']);
+    $result = $users::checkLogin($request->getParam("email"), $request->getParam('password') );
 
     $response_data = array();
     $response_data['error'] = false; 
-    //$response_data['response'] = $result; 
-    $response_data['response'] = array('email' => $request->getParam("email"), 'password'=>$request->getParam("password"));
+    $response_data['response'] = $result;
     $response->write(json_encode($response_data));
 
     return $response
