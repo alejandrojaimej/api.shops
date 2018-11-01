@@ -47,7 +47,7 @@ $app->post('/login', function(Request $request, Response $response, array $args)
 /**
  * Inserta un nuevo usuario en la base de datos
  */
-$app->post('/registerUser', function(Request $request, Response $response, array $args){
+$app->put('/registerUser/{email}/{password}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
