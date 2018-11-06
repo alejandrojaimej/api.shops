@@ -62,3 +62,22 @@ $app->put('/registerUser/{email}/{password}', function(Request $request, Respons
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);  
 });
+
+/**
+ * Inserta un nuevo usuario en la base de datos
+ */
+$app->patch('/activateUser/{userToken}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::activateUser($args['userToken']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
