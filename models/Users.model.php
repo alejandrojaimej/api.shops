@@ -42,12 +42,12 @@ class Users extends Model{
       try { 
           $password_hashed = password_hash($password, PASSWORD_DEFAULT);
           $dateTime = date('Y-m-d H:i:s');
-          $token = password_hash($email.$dateTime);
+          $token = password_hash($email.$dateTime, PASSWORD_DEFAULT);
           self::$db->beginTransaction();
           $stm->execute( array('email' => $email, 'password' => $password_hashed, 'token' => $token, 'date' => $dateTime) ); 
           self::$db->commit(); 
           $userID = self::$db->lastInsertId(); 
-          $query = 'SELECT email, token, active, registration_date FROM users WHERE id = :id';
+          $query = 'SELECT email, token, active, registration_date FROM users WHERE id=:id';
           $stm = self::$db->prepare($query);
           $stm->execute( array('id' => $userID) ); 
           return $stm->fetch();
