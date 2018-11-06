@@ -70,10 +70,8 @@ $app->get('/activateUser/{userToken}', function(Request $request, Response $resp
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-
-    return $response->write(json_encode('1: '.urldecode($args['userToken'])))
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+    echo '1: '.urldecode($args['userToken']);
+    echo '<br>2: '.urldecode($request->getParam('userToken'));
 
     /*$result = $users::activateUser(urldecode($args['userToken']));
 
@@ -84,5 +82,5 @@ $app->get('/activateUser/{userToken}', function(Request $request, Response $resp
 
     return $response
     ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);  /*
+    ->withStatus(200);  */
 });
