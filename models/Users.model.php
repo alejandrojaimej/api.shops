@@ -46,7 +46,11 @@ class Users extends Model{
           self::$db->beginTransaction();
           $stm->execute( array('email' => $email, 'password' => $password_hashed, 'token' => $token, 'date' => $dateTime) ); 
           self::$db->commit(); 
-          return  self::$db->lastInsertId(); 
+          $userID = self::$db->lastInsertId(); 
+          $query = 'SELECT email, token, active, registration_date FROM users WHERE id = :id';
+          $stm = self::$db->prepare($query);
+          $stm->execute( array('id' => $userID) ); 
+          return $stm->fetch();
       } catch(PDOExecption $e) { 
           self::$db->rollback(); 
           return false;
