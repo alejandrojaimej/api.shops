@@ -45,8 +45,8 @@ class Users extends Model{
           $token = password_hash($email.$dateTime, PASSWORD_DEFAULT);
           self::$db->beginTransaction();
           $stm->execute( array('email' => $email, 'password' => $password_hashed, 'token' => $token, 'date' => $dateTime) ); 
+          $userID = self::$db->lastInsertId();
           self::$db->commit(); 
-          $userID = self::$db->lastInsertId(); 
           $query = 'SELECT email, token, active, registration_date FROM users WHERE id=:id';
           $stm = self::$db->prepare($query);
           $stm->execute( array('id' => $userID) ); 
