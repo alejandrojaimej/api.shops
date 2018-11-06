@@ -70,7 +70,7 @@ $app->patch('/activateUser/{userToken}', function(Request $request, Response $re
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::activateUser($args['userToken']);
+    $result = $users::activateUser(urldecode($args['userToken']));
 
     $response_data = array();
     $response_data['error'] = false; 
