@@ -5,9 +5,9 @@ class Users extends Model{
   }
 
   /**
-   * Devuelve los textos para el buscador principal
-   * @param id: Devuelve texto específico dado un Id (podría hacerse por "component"..al gusto)
-   * @param lang: Idioma de los textos
+   * Comprueba el login de un usuario
+   * @param email: email introducido en el formulario
+   * @param password: Contraseña introducida por el usuario en el formulario
    * @return userId si se encuentra al usuario, false si no.
    */
   public static function checkLogin($email = false, $password = false){
@@ -21,7 +21,6 @@ class Users extends Model{
     }else{
       return false;
     }
-    
   }
 
   /**
@@ -38,12 +37,14 @@ class Users extends Model{
     if($stm->rowCount() > 0){
       return false;
     }else{
-      $query = 'INSERT INTO users (email, password, active) VALUES (:email, :password, 0)';
+      $query = 'INSERT INTO users (email, password, token, active, registration_date) VALUES (:email, :password, :token, 0, :date)';
       $stm = self::$db->prepare($query);
       try { 
           $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+          $dateTime = date('Y-m-d H:i:s');
+          $token = password_hash($email.$dateTime);
           self::$db->beginTransaction();
-          $stm->execute( array('email' => $email, 'password' => $password_hashed) ); 
+          $stm->execute( array('email' => $email, 'password' => $password_hashed, 'token' => $token, 'date' => $dateTime) ); 
           self::$db->commit(); 
           return  self::$db->lastInsertId(); 
       } catch(PDOExecption $e) { 
@@ -52,6 +53,26 @@ class Users extends Model{
       } 
     }
     return false;
+  }
+
+  /**
+   * Activa un usuario en el sistema
+   * @param token: password_hash( email + registration_date )
+   * @return true si se activa al usuario, false si no.
+   */
+  public static function activateUser($token = false){
+    if($token === false || empty($token)){return false;}
+    $query = 'UPDATE users SET active = 1 WHERE token=:token';
+    $stm = self::$db->prepare($query);
+    try { 
+      self::$db->beginTransaction();
+      $stm->execute(array('token'=>$token));
+      self::$db->commit(); 
+      return true;
+    } catch(PDOExecption $e) { 
+      self::$db->rollback(); 
+      return false;
+    }
   }
 }
 ?>
