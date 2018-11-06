@@ -50,7 +50,7 @@ class Users extends Model{
           $query = 'SELECT email, token, active, registration_date FROM users WHERE id=:id';
           $stm = self::$db->prepare($query);
           $stm->execute( array('id' => $userID) ); 
-          return $stm->fetch();
+          return $stm->fetch(PDO::FETCH_ASSOC);
       } catch(PDOExecption $e) { 
           self::$db->rollback(); 
           return false;
