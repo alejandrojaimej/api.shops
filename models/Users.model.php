@@ -74,6 +74,7 @@ class Users extends Model{
       self::$db->commit();
 
       $query = 'SELECT id FROM users WHERE token=:token';
+      $stm = self::$db->prepare($query);
       $stm->execute(array('token'=>$token));
       return $stm->fetch(PDO::FETCH_ASSOC);
     } catch(PDOExecption $e) { 
