@@ -71,8 +71,11 @@ class Users extends Model{
     try { 
       self::$db->beginTransaction();
       $stm->execute(array('token'=>$token));
-      self::$db->commit(); 
-      return true;
+      self::$db->commit();
+
+      $query = 'SELECT id FROM users WHERE token=:token';
+      $stm->execute(array('token'=>$token));
+      return $stm->fetch(PDO::FETCH_ASSOC);
     } catch(PDOExecption $e) { 
       self::$db->rollback(); 
       return false;
