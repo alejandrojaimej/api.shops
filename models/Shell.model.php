@@ -11,7 +11,7 @@ class Shell extends Model{
    */
   public static function getText($lang = LANGS[0], $controller = 'login'){
     $search = 'component, '.(!in_array($lang, LANGS) ? LANGS[0] : $lang);
-    $query = 'SELECT '.$search.' FROM translations WHERE controller=:controller';
+    $query = 'SELECT '.$search.' FROM translations WHERE controller=:controller OR controller="base"';
     $stm = self::$db->prepare($query);
     $stm->execute(array('controller'=>$controller));
     return $stm->fetchAll(PDO::FETCH_KEY_PAIR);
