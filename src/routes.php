@@ -70,11 +70,11 @@ $app->post('/activateUser', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::activateUser($request->getParam('userToken'));
+    //$result = $users::activateUser($request->getParam('userToken'));
 
     $response_data = array();
     $response_data['error'] = false; 
-    $response_data['response'] = $result; 
+    $response_data['response'] = $request->getParam('userToken'); 
     $response->write(json_encode($response_data));
 
     return $response
