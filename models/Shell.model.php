@@ -30,10 +30,10 @@ class Shell extends Model{
     $stm->execute(array('controller'=>$controller));
     $textos = $stm->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    $query = 'SELECT name FROM comerces WHERE userId = :user';
+    $query = 'SELECT id, name FROM comerces WHERE userId = :user';
     $stm = self::$db->prepare($query);
     $stm->execute(array('user'=>$userId));
-    $comercios = $stm->fetch();
+    $comercios = $stm->fetchAll(PDO::FETCH_KEY_PAIR);
 
     $query = 'SELECT name, surname FROM user_details WHERE userId = :user';
     $stm = self::$db->prepare($query);
