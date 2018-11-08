@@ -33,12 +33,12 @@ class Shell extends Model{
     $query = 'SELECT name FROM comerces WHERE userId = :user';
     $stm = self::$db->prepare($query);
     $stm->execute(array('user'=>$userId));
-    $comercios = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $comercios = $stm->fetch();
 
     $query = 'SELECT name, surname FROM user_details WHERE userId = :user';
     $stm = self::$db->prepare($query);
     $stm->execute(array('user'=>$userId));
-    $usuario = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $usuario = $stm->fetch();
 
     return array('texts'=>$textos, 'comerces'=>$comercios, 'user'=>$usuario);
   }
