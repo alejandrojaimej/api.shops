@@ -82,5 +82,16 @@ class Users extends Model{
       return false;
     }
   }
+
+  /**
+   * Comprueba si un email existe en  la base de datos y devuelve el token del usuario en caso de que exista
+   */
+  public static function checkEmail($email = false){
+    if($email === false || empty($email)){return false;}
+    $query = 'SELECT id, email, token FROM users WHERE email=:email AND active = 1';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('email'=>$email));
+    return $stm->fetch(PDO::FETCH_ASSOC);
+  }
 }
 ?>
