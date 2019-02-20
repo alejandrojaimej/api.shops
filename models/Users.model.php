@@ -99,7 +99,7 @@ class Users extends Model{
    */
   public static function getGalleryImages($userId = false){
     if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT id, name, order FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY order ASC';
+    $query = 'SELECT id, name, position FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=>$userId));
     return $stm->fetch(PDO::FETCH_ASSOC);
