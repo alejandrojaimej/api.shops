@@ -93,5 +93,16 @@ class Users extends Model{
     $stm->execute(array('email'=>$email));
     return $stm->fetch(PDO::FETCH_ASSOC);
   }
+
+  /**
+   * Devuelve las imágenes visibles en la galería de un usuario y por orden
+   */
+  public static function getGalleryImages($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT id, name, order FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY order ASC';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $stm->fetch(PDO::FETCH_ASSOC);
+  }
 }
 ?>
