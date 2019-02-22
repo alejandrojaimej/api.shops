@@ -102,7 +102,7 @@ class Users extends Model{
     $query = 'SELECT id, name, position FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=>$userId));
-    return $stm->fetch();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
 }
 ?>
