@@ -5,6 +5,11 @@ use Slim\Http\Response;
 
 // Routes
 
+
+/**
+ *   METODOS GET
+ */
+
 /**
  * Devuelve todos los textos para una view determinada
  * @param lang Tiene que ser uno de los definidos en LANGS (globlas.php) en caso de ser otro devuelve el primer idioma definido.
@@ -66,6 +71,9 @@ $app->get('/userGallery/{userId}', function(Request $request, Response $response
 });
 
 
+/**
+ *   METODOS POST
+ */
 
 /**
  * Comprueba si un par Usuario/Contraseña existe en la base de datos
@@ -105,27 +113,9 @@ $app->post('/updateImagePosition', function(Request $request, Response $response
     ->withStatus(200);  
 });
 
-/**
- * Inserta un nuevo usuario en la base de datos
- */
-$app->put('/registerUser/{email}/{password}', function(Request $request, Response $response, array $args){
-    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
-    $users = loadModel('Users');
-
-    $result = $users::addUser($args['email'], $args['password']);
-
-    $response_data = array();
-    $response_data['error'] = false; 
-    $response_data['response'] = $result; 
-    $response->write(json_encode($response_data));
-
-    return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);  
-});
 
 /**
- * Inserta un nuevo usuario en la base de datos
+ * Activa un usuario registrado en la base de datos
  */
 $app->post('/activateUser', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
@@ -161,3 +151,46 @@ $app->post('/forgotPass', function(Request $request, Response $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);  
 });
+
+/**
+ * Sube una nueva imagen para la galería de los usuarios
+ */
+$app->post('/uploadImage', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::uploadImage($request->getParam("userId"), $request->getParam("image") );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
+ *   METODOS PUT
+ */
+
+/**
+ * Inserta un nuevo usuario en la base de datos
+ */
+$app->put('/registerUser/{email}/{password}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::addUser($args['email'], $args['password']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
