@@ -135,8 +135,16 @@ class Users extends Model{
     $tempFile = $image['tmp_name'];
     $targetFile =  $path. $image['name'];
     $res = file_put_contents($targetFile, file_get_contents($tempFile));
-    //$res = move_uploaded_file($tempFile,$targetFile);
-    return $image;
+    if($res !== false){
+      chmod($targetFile, 0755);
+      $query = 'INSERT INTO user_gallery (userId, name, position) VALUES (:userId, :name, (SELECT MAX(position)+1 FROM user_gallery WHERE userId = :userId) )';
+      $stm = self::$db->prepare($query);
+      self::$db->beginTransaction();
+      $stm->execute( array('userId' => $userId, 'name' => $image['name']) );
+      self::$db->commit(); 
+    }else{
+      return false;
+    }
   }
 }
 ?>
