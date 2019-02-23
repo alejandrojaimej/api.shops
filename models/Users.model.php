@@ -121,7 +121,7 @@ class Users extends Model{
     if($userId === false || empty($userId) || $image === false || empty($image)){return false;}
     
     //comprobar que las rutas de subida existen y tienen permisos
-    $path = "/var/www/html/admin.mk1/public/assets/images/user/$userId/";
+    $path = "../../admin.mk1/public/assets/images/user/$userId/";
     if (!is_dir($path)) {
       mkdir($path);
       chmod($path, 0777);
