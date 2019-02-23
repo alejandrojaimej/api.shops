@@ -123,11 +123,13 @@ class Users extends Model{
     //comprobar que las rutas de subida existen y tienen permisos
     $path = "/var/www/html/admin.mk1/public/assets/images/user/$userId/";
     if (!is_dir($path)) {
-      mkdir($path, 0777);      
+      mkdir($path);
+      chmod($path, 0777);
     }
     $path .= 'gallery/';
     if (!is_dir($path)) {
-      mkdir($path, 0777);
+      mkdir($path);
+      chmod($path, 0777);
     }
 
     $tempFile = $image['tmp_name'];
