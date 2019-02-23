@@ -132,9 +132,10 @@ class Users extends Model{
       chmod($path, 0777);
     }
 
-    $tempFile = $image['tmp_name'];
-    $targetFile =  $path. $image['name'];
-    return  move_uploaded_file($tempFile,$targetFile);
+    $tempFile = $image['file']['tmp_name'];
+    $targetFile =  $path. $image['file']['name'];
+    $res = move_uploaded_file($tempFile,$targetFile);
+    return $res;
   }
 }
 ?>
