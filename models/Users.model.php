@@ -137,11 +137,12 @@ class Users extends Model{
     $res = file_put_contents($targetFile, file_get_contents($tempFile));
     if($res !== false){
       chmod($targetFile, 0755);
-      $query = 'INSERT INTO user_gallery (userId, name, position) VALUES (:userId, :name, (SELECT MAX(position)+1 FROM user_gallery WHERE userId = :userId) )';
+      $query = 'INSERT INTO user_gallery (userId, name, position) VALUES (:userId, :name, (SELECT MAX(position)+1 FROM user_gallery WHERE userId = :userId2) )';
       $stm = self::$db->prepare($query);
       self::$db->beginTransaction();
-      $stm->execute( array('userId' => $userId, 'name' => $image['name']) );
+      $stm->execute( array('userId' => $userId, 'name' => $image['name'], 'userId2'=>$userId) );
       self::$db->commit(); 
+      return true;
     }else{
       return false;
     }
