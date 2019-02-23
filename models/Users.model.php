@@ -122,7 +122,7 @@ class Users extends Model{
     
     $tempFile = $image['file']['tmp_name'];
     $targetFile =  "/var/www/html/admin.mk1/public/images/user/$userId/gallery/". $image['file']['name'];
-    move_uploaded_file($tempFile,$targetFile);
+    return move_uploaded_file($tempFile,$targetFile);
   }
 }
 ?>
