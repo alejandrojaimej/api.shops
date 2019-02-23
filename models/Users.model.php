@@ -152,8 +152,9 @@ class Users extends Model{
       $stm = self::$db->prepare($query);
       self::$db->beginTransaction();
       $stm->execute( array('userId' => $userId, 'name' => $image['name'], 'position'=>$position) );
+      $imageId = self::$db->lastInsertId();
       self::$db->commit(); 
-      return true;
+      return array('id'=>$imageId, 'name'=>$image['name']);
     }else{
       return false;
     }
