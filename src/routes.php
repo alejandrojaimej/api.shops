@@ -87,6 +87,25 @@ $app->post('/login', function(Request $request, Response $response){
 });
 
 /**
+ * Actualiza la posición de una imágen de la galería de usuario
+ */
+$app->post('/updateImagePosition', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::updateImagePosition($request->getParam("id"), $request->getParam('position') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
  * Inserta un nuevo usuario en la base de datos
  */
 $app->put('/registerUser/{email}/{password}', function(Request $request, Response $response, array $args){

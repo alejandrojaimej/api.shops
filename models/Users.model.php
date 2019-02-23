@@ -104,5 +104,17 @@ class Users extends Model{
     $stm->execute(array('userId'=>$userId));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  /**
+   * Actualiza la posición de una imagen en la bd dado su id y nueva posción
+   */
+  public static function updateImagePosition($id = false, $position = false){
+    if($id === false || $position === false){return false;}
+    $query = 'UPDATE user_gallery SET position = :position WHERE id = :id';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'position'=>$position, 'id'=>$id ));
+    $response = $stm->fetch();
+    return true;
+  }
 }
 ?>
