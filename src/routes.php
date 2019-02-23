@@ -164,7 +164,7 @@ $app->post('/uploadImage', function(Request $request, Response $response){
     $response_data = array();
     $response_data['error'] = false; 
     $response_data['response'] = $result;
-    $response->write(json_encode($response_data));
+    $response->write(json_encode(array($request->getParam("userId"), $request->getParam("image"))));
 
     return $response
     ->withHeader('Content-type', 'application/json')

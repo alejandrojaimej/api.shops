@@ -121,11 +121,12 @@ class Users extends Model{
     if($userId === false || empty($userId) || $image === false || empty($image)){return false;}
     
     //comprobar que las rutas de subida existen y tienen permisos
-    if (!is_dir("/var/www/html/admin.mk1/public/images/user/$userId")) {
-      mkdir("/var/www/html/admin.mk1/public/images/user/$userId");
-      chmod("/var/www/html/admin.mk1/public/images/user/$userId", 0777);
+    $path = "/var/www/html/admin.mk1/public/images/user/$userId/";
+    if (!is_dir($path)) {
+      mkdir($path);
+      chmod($path, 0777);
     }
-    $path = "/var/www/html/admin.mk1/public/images/user/$userId/gallery/";
+    $path .= 'gallery/';
     if (!is_dir($path)) {
         mkdir($path);
         chmod($path, 0777);
@@ -133,7 +134,6 @@ class Users extends Model{
 
     $tempFile = $image['file']['tmp_name'];
     $targetFile =  $path. $image['file']['name'];
-    move_uploaded_file($tempFile,$targetFile);
     return  move_uploaded_file($tempFile,$targetFile);
   }
 }
