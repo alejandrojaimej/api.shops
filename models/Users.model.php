@@ -154,7 +154,7 @@ class Users extends Model{
       $stm->execute( array('userId' => $userId, 'name' => $image['name'], 'position'=>$position) );
       $imageId = self::$db->lastInsertId();
       self::$db->commit(); 
-      return array('id'=>$imageId, 'name'=>$image['name']);
+      return array($imageId, $image['name']);
     }else{
       return false;
     }
