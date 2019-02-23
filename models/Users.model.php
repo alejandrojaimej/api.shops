@@ -134,9 +134,9 @@ class Users extends Model{
 
     $tempFile = $image['tmp_name'];
     $targetFile =  $path. $image['name'];
-    $res = move_uploaded_file($tempFile,$targetFile);
+    //$res = move_uploaded_file($tempFile,$targetFile);
     $res2 = copy($image['tmp_name'], $targetFile);
-    return [$res, $res2];
+    return $res2;
   }
 }
 ?>
