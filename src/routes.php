@@ -59,7 +59,11 @@ $app->get('/userGallery/{userId}', function(Request $request, Response $response
     $model = loadModel('Users');
 
     $result = $model::getGalleryImages($args['userId']);
-    $response->write(json_encode($result));
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
 
     return $response
     ->withHeader('Content-type', 'application/json')
@@ -156,11 +160,12 @@ $app->post('/uploadImage', function(Request $request, Response $response){
     $users = loadModel('Users');
 
     $result = $users::uploadImage($request->getParam("userId"), $request->getParam("image") );
+    $response->write(json_encode($result));
 
-    $response_data = array();
+    /*$response_data = array();
     $response_data['error'] = false; 
     $response_data['response'] = $result;
-    $response->write(json_encode($response_data));
+    $response->write(json_encode($response_data));*/
 
     return $response
     ->withHeader('Content-type', 'application/json')
