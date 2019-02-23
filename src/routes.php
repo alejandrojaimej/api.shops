@@ -59,11 +59,7 @@ $app->get('/userGallery/{userId}', function(Request $request, Response $response
     $model = loadModel('Users');
 
     $result = $model::getGalleryImages($args['userId']);
-
-    $response_data = array();
-    $response_data['error'] = false; 
-    $response_data['response'] = $result; 
-    $response->write(json_encode($response_data));
+    $response->write(json_encode($result));
 
     return $response
     ->withHeader('Content-type', 'application/json')
