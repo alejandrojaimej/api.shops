@@ -121,8 +121,9 @@ class Users extends Model{
     if($userId === false || empty($userId) || $image === false || empty($image)){return false;}
     
     $tempFile = $image['file']['tmp_name'];
-    $targetFile =  "/var/www/html/admin.mk1/public/images/user/$userId/gallery/". $image['file']['name'];
-    return move_uploaded_file($tempFile,$targetFile);
+    $targetFile =  __FILE__."/../public/images/user/$userId/gallery/". $image['file']['name'];
+    move_uploaded_file($tempFile,$targetFile);
+    return  $targetFile;
   }
 }
 ?>
