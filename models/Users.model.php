@@ -189,5 +189,28 @@ class Users extends Model{
     $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
     return true;
   }
+
+
+
+  /**
+   * Devuelve la descripcion de un usuario
+   */
+  public static function getDescription($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT description FROM user_description WHERE userId=:userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $response = $stm->fetch();
+  }
+  /**
+   * Añade/modifica la descripción de un usuario
+   */
+  public static function setDescription($userId = false, $description = false){
+    if($description === false || $userId === false){return false;}
+    $query = 'INSERT INTO user_description (userId, description) VALUES (:userId, :description) ON duplicate KEY UPDATE description=:description2';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'userId'=>$userId, 'description'=>$description, 'description2'=>$description ));
+    return true;
+  }
 }
 ?>
