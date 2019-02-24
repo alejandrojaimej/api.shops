@@ -99,7 +99,7 @@ class Users extends Model{
    */
   public static function getGalleryImages($userId = false){
     if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT id, name, position FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
+    $query = 'SELECT id, name, position, favorite FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=>$userId));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -117,6 +117,9 @@ class Users extends Model{
     return true;
   }
 
+  /**
+   * Sube y guarda una nueva imagen para la galería
+   */
   public static function uploadImage($userId = false, $image = false){
     if($userId === false || empty($userId) || $image === false || empty($image)){return false;}
     
@@ -158,6 +161,33 @@ class Users extends Model{
     }else{
       return false;
     }
+  }
+
+  /**
+   * Elije una imagen favorita
+   */
+  public static function setFavoriteImage($id = false, $userId = false){
+    if($id === false || $userId === false){return false;}
+    //quitar la otra imagen favorita si la hubiera
+    $query = 'UPDATE user_gallery SET favorite = 0 WHERE userId = :userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'userId'=>$userId )); 
+    //setear la nueva favorita
+    $query = 'UPDATE user_gallery SET favorite = 1 WHERE id = :id AND userId = :userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
+    return true;
+  }
+
+  /**
+   * Borrado lógico de una imagen de la galería
+   */
+  public static function deleteImage($id = false, $userId = false){
+    if($id === false || $userId === false){return false;}
+    $query = 'UPDATE user_gallery SET visible = 0 WHERE id = :id AND userId = :userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
+    return true;
   }
 }
 ?>
