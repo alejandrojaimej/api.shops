@@ -70,6 +70,24 @@ $app->get('/userGallery/{userId}', function(Request $request, Response $response
     ->withStatus(200);  
 });
 
+/**
+ * Obtiene la descripcion de un usuario
+ */
+$app->get('/getDescription/{userId}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Users');
+
+    $result = $model::getDescription($args['userId']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
 
 /**
  *   METODOS POST
@@ -194,6 +212,25 @@ $app->post('/deleteImage', function(Request $request, Response $response){
     $users = loadModel('Users');
 
     $result = $users::deleteImage($request->getParam("id"), $request->getParam('userId') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
+ * Inserta/modifica la descripción de un usuario
+ */
+$app->post('/setDescription', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::setDescription($request->getParam("userId"), $request->getParam('description') );
 
     $response_data = array();
     $response_data['error'] = false; 
