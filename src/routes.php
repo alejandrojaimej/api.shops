@@ -162,10 +162,43 @@ $app->post('/uploadImage', function(Request $request, Response $response){
     $result = $users::uploadImage($request->getParam("userId"), $request->getParam("image") );
     $response->write(json_encode($result));
 
-    /*$response_data = array();
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
+ * Modifica la imagen favorita del usuario
+ */
+$app->post('/setFavoriteImage', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::setFavoriteImage($request->getParam("id"), $request->getParam('userId') );
+
+    $response_data = array();
     $response_data['error'] = false; 
     $response_data['response'] = $result;
-    $response->write(json_encode($response_data));*/
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
+ * Borrado lógico de una imagen de la galería
+ */
+$app->post('/deleteImage', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::deleteImage($request->getParam("id"), $request->getParam('userId') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
 
     return $response
     ->withHeader('Content-type', 'application/json')
