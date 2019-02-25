@@ -112,7 +112,7 @@ $app->get('/getContactEmail/{userId}', function(Request $request, Response $resp
 /**
  * Obtiene el email de contacto de un usuario
  */
-$app->get('/getAllPaymentMethods', function(Request $request, Response $response, array $args){
+$app->get('/getAllPaymentMethods/{lang}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $model = loadModel('Users');
 
