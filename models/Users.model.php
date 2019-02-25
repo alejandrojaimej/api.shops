@@ -220,7 +220,7 @@ class Users extends Model{
    */
   public static function getContactEmail($userId = false){
     if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT description FROM user_email WHERE userId=:userId';
+    $query = 'SELECT email FROM user_email WHERE userId=:userId';
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=>$userId));
     return $response = $stm->fetch();
