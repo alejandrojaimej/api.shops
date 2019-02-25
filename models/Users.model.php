@@ -235,5 +235,31 @@ class Users extends Model{
     $stm->execute(array( 'userId'=>$userId, 'email'=>$email, 'email2'=>$email ));
     return true;
   }
+
+  /**
+   * Añade/modifica métodos de pago aceptados por un usuario
+   */
+  public static function setPaymentMethods($userId = false, $methods = false){
+    if($methods === false || $userId === false){return false;}
+    $methods = implode(',', $methods);
+    $query = 'INSERT INTO user_payment_methods (userId, payment_methods) VALUES (:userId, :payment_methods) ON duplicate KEY UPDATE payment_methods=:payment_methods2';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'userId'=>$userId, 'payment_methods'=>$methods, 'payment_methods2'=>$methods ));
+    return true;
+  }
+
+  /**
+   * Obtiene todos los métodos de pago posibles
+   * (Si no se especifica un idioma o no lo tenenos, se envía en el idioma por defecto de la web)
+   */
+  public static function getAllPaymentMethods($lang = LANGS[0]){
+    $lang = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
+    $query = 'SELECT '.$lang.' FROM payment_methods';
+    $stm = self::$db->prepare($query);
+    $stm->execute();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  
 }
 ?>
