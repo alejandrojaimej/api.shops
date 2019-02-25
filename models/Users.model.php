@@ -254,7 +254,7 @@ class Users extends Model{
    */
   public static function getAllPaymentMethods($lang = LANGS[0]){
     $lang = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
-    $query = 'SELECT '.$lang.' FROM payment_methods';
+    $query = 'SELECT id, '.$lang.' FROM payment_methods';
     $stm = self::$db->prepare($query);
     $stm->execute();
     return $stm->fetchAll(PDO::FETCH_ASSOC);
