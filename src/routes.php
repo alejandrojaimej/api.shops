@@ -109,6 +109,25 @@ $app->get('/getContactEmail/{userId}', function(Request $request, Response $resp
     ->withStatus(200);  
 });
 
+/**
+ * Obtiene el email de contacto de un usuario
+ */
+$app->get('/getAllPaymentMethods', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Users');
+
+    $result = $model::getAllPaymentMethods($args['lang']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
 
 
 
@@ -274,6 +293,25 @@ $app->post('/setContactEmail', function(Request $request, Response $response){
     $users = loadModel('Users');
 
     $result = $users::setContactEmail($request->getParam("userId"), $request->getParam('email') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
+ * Inserta/modifica los métods de pago aceptados por un usuario
+ */
+$app->post('/setPaymentMethods', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::setPaymentMethods($request->getParam("userId"), $request->getParam('methods') );
 
     $response_data = array();
     $response_data['error'] = false; 
