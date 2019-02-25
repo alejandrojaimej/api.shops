@@ -89,6 +89,29 @@ $app->get('/getDescription/{userId}', function(Request $request, Response $respo
     ->withStatus(200);  
 });
 
+
+/**
+ * Obtiene el email de contacto de un usuario
+ */
+$app->get('/getContactEmail/{userId}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Users');
+
+    $result = $model::getContactEmail($args['userId']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+
+
+
 /**
  *   METODOS POST
  */
@@ -241,6 +264,27 @@ $app->post('/setDescription', function(Request $request, Response $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);  
 });
+
+
+/**
+ * Inserta/modifica el email de contacto de un usuario
+ */
+$app->post('/setContactEmail', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::setContactEmail($request->getParam("userId"), $request->getParam('email') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
 
 /**
  *   METODOS PUT

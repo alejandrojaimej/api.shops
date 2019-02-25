@@ -212,5 +212,28 @@ class Users extends Model{
     $stm->execute(array( 'userId'=>$userId, 'description'=>$description, 'description2'=>$description ));
     return true;
   }
+
+
+
+   /**
+   * Devuelve el email de contacto de un usuario
+   */
+  public static function getContactEmail($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT description FROM user_email WHERE userId=:userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $response = $stm->fetch();
+  }
+  /**
+   * Añade/modifica el email de contacto de un usuario
+   */
+  public static function setContactEmail($userId = false, $email = false){
+    if($email === false || $userId === false){return false;}
+    $query = 'INSERT INTO user_email (userId, email) VALUES (:userId, :email) ON duplicate KEY UPDATE email=:email2';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'userId'=>$userId, 'email'=>$email, 'email2'=>$email ));
+    return true;
+  }
 }
 ?>
