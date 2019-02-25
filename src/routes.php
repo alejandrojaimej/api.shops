@@ -128,7 +128,21 @@ $app->get('/getAllPaymentMethods/{lang}', function(Request $request, Response $r
     ->withStatus(200);  
 });
 
+$app->get('/getUserPaymentMethods/{userId}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Users');
 
+    $result = $model::getUserPaymentMethods($args['userId']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
 
 
 /**

@@ -260,6 +260,17 @@ class Users extends Model{
     return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Obtiene todos los métodos de pago posibles
+   * (Si no se especifica un idioma o no lo tenenos, se envía en el idioma por defecto de la web)
+   */
+  public static function getUserPaymentMethods($userId = false){
+    if($userId === false){return false;}
+    $query = 'SELECT payment_methods FROM user_payment_methods WHERE userId = :userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $stm->fetch();
+  }
   
 }
 ?>
