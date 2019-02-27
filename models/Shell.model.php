@@ -65,5 +65,26 @@ class Shell extends Model{
     $stm->execute(array('filter_id'=>$filter_id));
     return $stm->fetch();
   }
+
+  /**
+   * Devuelve los nombres de los sub_filtros de un filtro específico
+   */
+  public static function getSubFilterByFilterId($lang = LANGS[0], $filter_id = false){
+    if($filter_id === false){return false;}
+    $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
+    $query = 'SELECT '.$search.' FROM sub_filters WHERE filter_id = :filter_id ORDER BY filter_id, id ASC';
+    $stm = self::$db->prepare($query);
+    $stm->execute();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public static function getFiltersAndSubfilters($lang = LANGS[0]){
+    $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
+    $query = 'SELECT distinct filters.id, filters.'.$search.' AS filter_name, sub_filters.id, sub_filters.'.$search.' AS sub_filter_name FROM filters, sub_filters WHERE filters.id = sub_filters.filter_id';
+    $stm = self::$db->prepare($query);
+    $stm->execute();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
+
 }
 ?>
