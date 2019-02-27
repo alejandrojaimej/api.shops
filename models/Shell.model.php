@@ -42,5 +42,28 @@ class Shell extends Model{
 
     return array('texts'=>$textos, /*'comerces'=>$comercios,*/ 'user'=>$usuario);
   }
+
+  /**
+   * Devuelve los nombres de los filtros
+   */
+  public static function getAllFiltersNames($lang = LANGS[0]){
+    $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
+    $query = 'SELECT '.$search.' FROM filters';
+    $stm = self::$db->prepare($query);
+    $stm->execute();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  /**
+   * Devuelve el nombre de un filtro específico
+   */
+  public static function getFilterNames($lang = LANGS[0], $filter_id = false){
+    if($filter_id === false){return false;}
+    $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
+    $query = 'SELECT '.$search.' FROM filters WHERE id=:filter_id';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('filter_id'=>$filter_id));
+    return $stm->fetch();
+  }
 }
 ?>

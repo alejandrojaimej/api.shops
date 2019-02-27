@@ -94,16 +94,6 @@ class Users extends Model{
     return $stm->fetch(PDO::FETCH_ASSOC);
   }
 
-  /**
-   * Devuelve las imágenes visibles en la galería de un usuario y por orden
-   */
-  public static function getGalleryImages($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT id, name, position, favorite FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
-    $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
-    return $stm->fetchAll(PDO::FETCH_ASSOC);
-  }
 
   /**
    * Actualiza la posición de una imagen en la bd dado su id y nueva posción
@@ -163,6 +153,25 @@ class Users extends Model{
     }
   }
 
+   /**
+   * Borrado lógico de una imagen de la galería
+   */
+  public static function deleteImage($id = false, $userId = false){
+    if($id === false || $userId === false){return false;}
+    $query = 'UPDATE user_gallery SET visible = 0 WHERE id = :id AND userId = :userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
+    return true;
+  }
+
+
+  /**
+   *  ***********************************
+   *  ************* SETTERS *************
+   * ************************************
+   */
+
+
   /**
    * Elije una imagen favorita
    */
@@ -180,29 +189,6 @@ class Users extends Model{
   }
 
   /**
-   * Borrado lógico de una imagen de la galería
-   */
-  public static function deleteImage($id = false, $userId = false){
-    if($id === false || $userId === false){return false;}
-    $query = 'UPDATE user_gallery SET visible = 0 WHERE id = :id AND userId = :userId';
-    $stm = self::$db->prepare($query);
-    $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
-    return true;
-  }
-
-
-
-  /**
-   * Devuelve la descripcion de un usuario
-   */
-  public static function getDescription($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT description FROM user_description WHERE userId=:userId';
-    $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
-    return $response = $stm->fetch();
-  }
-  /**
    * Añade/modifica la descripción de un usuario
    */
   public static function setDescription($userId = false, $description = false){
@@ -213,18 +199,6 @@ class Users extends Model{
     return true;
   }
 
-
-
-   /**
-   * Devuelve el email de contacto de un usuario
-   */
-  public static function getContactEmail($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT email FROM user_email WHERE userId=:userId';
-    $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
-    return $response = $stm->fetch();
-  }
   /**
    * Añade/modifica el email de contacto de un usuario
    */
@@ -249,6 +223,57 @@ class Users extends Model{
   }
 
   /**
+   * Añade/modifica los filtros de un usuario
+   */
+  public static function setFilters($userId = false, $filter_id = false, $sub_filters = false){
+    if($userId === false || $filter_id === false || $sub_filters === false){return false;}
+    $sub_filters = implode(',', $sub_filters);
+    $query = 'INSERT INTO user_filters (userId, filter_id, sub_filters) VALUES (:userId, :filter_id, :sub_filters) ON duplicate KEY UPDATE sub_filters=:sub_filters2';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'userId'=>$userId, 'filter_id'=>$filter_id, 'sub_filters'=>$subfilters, 'sub_filters2'=>$subfilters ));
+    return true;
+  }
+
+  /**
+   *  ***********************************
+   *  ************* GETTERS *************
+   * ************************************
+   */
+
+  /**
+   * Devuelve las imágenes visibles en la galería de un usuario y por orden
+   */
+  public static function getGalleryImages($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT id, name, position, favorite FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  /**
+   * Devuelve la descripcion de un usuario
+   */
+  public static function getDescription($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT description FROM user_description WHERE userId=:userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $response = $stm->fetch();
+  }
+
+   /**
+   * Devuelve el email de contacto de un usuario
+   */
+  public static function getContactEmail($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT email FROM user_email WHERE userId=:userId';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $response = $stm->fetch();
+  }
+
+  /**
    * Obtiene todos los métodos de pago posibles
    * (Si no se especifica un idioma o no lo tenenos, se envía en el idioma por defecto de la web)
    */
@@ -270,6 +295,17 @@ class Users extends Model{
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=>$userId));
     return $stm->fetch();
+  }
+
+  /**
+   * Devuelve todos los filtros de un usuario
+   */
+  public static function getUserFilters($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT filter_id, sub_filters FROM user_filters WHERE userId=:userId ORDER BY filter_id ASC';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId));
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
   
 }
