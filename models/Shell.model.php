@@ -83,7 +83,7 @@ class Shell extends Model{
    */
   public static function getFiltersAndSubfilters($lang = LANGS[0]){
     $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
-    $query = 'SELECT distinct filters.id, filters.'.$search.' AS filter_name, sub_filters.id, sub_filters.'.$search.' AS sub_filter_name FROM filters, sub_filters WHERE filters.id = sub_filters.filter_id';
+    $query = 'SELECT distinct filters.id as filter_id, filters.'.$search.' AS filter_name, sub_filters.id as sub_filter_id, sub_filters.'.$search.' AS sub_filter_name FROM filters, sub_filters WHERE filters.id = sub_filters.filter_id';
     $stm = self::$db->prepare($query);
     $stm->execute();
     return $stm->fetchAll(PDO::FETCH_ASSOC);
