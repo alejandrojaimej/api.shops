@@ -54,11 +54,11 @@ $app->get('/adminText/{lang}/{controller}/{userId}', function(Request $request, 
  * Devuelve las imágenes de la galería de un usuario
  * @param userId	Contiene un id de usuario válido en la db
  */
-$app->get('/userGallery/{userId}', function(Request $request, Response $response, array $args){
+$app->get('/userGallery/{profile_id}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $model = loadModel('Users');
 
-    $result = $model::getGalleryImages($args['userId']);
+    $result = $model::getGalleryImages($args['profile_id']);
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -73,11 +73,11 @@ $app->get('/userGallery/{userId}', function(Request $request, Response $response
 /**
  * Obtiene la descripcion de un usuario
  */
-$app->get('/getDescription/{userId}', function(Request $request, Response $response, array $args){
+$app->get('/getDescription/{profile_id}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $model = loadModel('Users');
 
-    $result = $model::getDescription($args['userId']);
+    $result = $model::getDescription($args['profile_id']);
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -93,11 +93,11 @@ $app->get('/getDescription/{userId}', function(Request $request, Response $respo
 /**
  * Obtiene el email de contacto de un usuario
  */
-$app->get('/getContactEmail/{userId}', function(Request $request, Response $response, array $args){
+$app->get('/getContactEmail/{profile_id}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $model = loadModel('Users');
 
-    $result = $model::getContactEmail($args['userId']);
+    $result = $model::getContactEmail($args['profile_id']);
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -131,11 +131,11 @@ $app->get('/getAllPaymentMethods/{lang}', function(Request $request, Response $r
 /**
  * Obtiene las formas de pago seleccionadas por un usuario
  */
-$app->get('/getUserPaymentMethods/{userId}', function(Request $request, Response $response, array $args){
+$app->get('/getUserPaymentMethods/{profile_id}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $model = loadModel('Users');
 
-    $result = $model::getUserPaymentMethods($args['userId']);
+    $result = $model::getUserPaymentMethods($args['profile_id']);
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -275,7 +275,7 @@ $app->post('/uploadImage', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::uploadImage($request->getParam("userId"), $request->getParam("image") );
+    $result = $users::uploadImage($request->getParam("profile_id"), $request->getParam("image") );
     $response->write(json_encode($result));
 
     return $response
@@ -290,7 +290,7 @@ $app->post('/setFavoriteImage', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::setFavoriteImage($request->getParam("id"), $request->getParam('userId') );
+    $result = $users::setFavoriteImage($request->getParam("id"), $request->getParam('profile_id') );
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -309,7 +309,7 @@ $app->post('/deleteImage', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::deleteImage($request->getParam("id"), $request->getParam('userId') );
+    $result = $users::deleteImage($request->getParam("id"), $request->getParam('profile_id') );
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -328,7 +328,7 @@ $app->post('/setDescription', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::setDescription($request->getParam("userId"), $request->getParam('description') );
+    $result = $users::setDescription($request->getParam("profile_id"), $request->getParam('description') );
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -348,7 +348,7 @@ $app->post('/setContactEmail', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::setContactEmail($request->getParam("userId"), $request->getParam('email') );
+    $result = $users::setContactEmail($request->getParam("profile_id"), $request->getParam('email') );
 
     $response_data = array();
     $response_data['error'] = false; 
@@ -367,7 +367,7 @@ $app->post('/setPaymentMethods', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $users = loadModel('Users');
 
-    $result = $users::setPaymentMethods($request->getParam("userId"), $request->getParam('methods') );
+    $result = $users::setPaymentMethods($request->getParam("profile_id"), $request->getParam('methods') );
 
     $response_data = array();
     $response_data['error'] = false; 

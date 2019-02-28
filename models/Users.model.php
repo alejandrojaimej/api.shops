@@ -110,11 +110,11 @@ class Users extends Model{
   /**
    * Sube y guarda una nueva imagen para la galería
    */
-  public static function uploadImage($userId = false, $image = false){
-    if($userId === false || empty($userId) || $image === false || empty($image)){return false;}
+  public static function uploadImage($profile_id = false, $image = false){
+    if($profile_id === false || empty($profile_id) || $image === false || empty($image)){return false;}
     
     //comprobar que las rutas de subida existen y tienen permisos
-    $path = "../../admin.mk1/public/assets/images/user/$userId/";
+    $path = "../../admin.mk1/public/assets/images/user/$profile_id/";
     if (!is_dir($path)) {
       mkdir($path);
       chmod($path, 0777);
@@ -131,9 +131,9 @@ class Users extends Model{
     if($res !== false){
       chmod($targetFile, 0755);
 
-      $query = 'SELECT MAX(position) AS pos FROM user_gallery WHERE userId = :userId';
+      $query = 'SELECT MAX(position) AS pos FROM user_gallery WHERE profile_id = :profile_id';
       $stm = self::$db->prepare($query);
-      $stm->execute( array('userId' => $userId) );
+      $stm->execute( array('profile_id' => $profile_id) );
       $response = $stm->fetch();
       if(!$response){
         $position = 0;
@@ -141,10 +141,10 @@ class Users extends Model{
         $position = $response['pos'] + 1;
       }
 
-      $query = 'INSERT INTO user_gallery (userId, name, position) VALUES (:userId, :name, :position )';
+      $query = 'INSERT INTO user_gallery (profile_id, name, position) VALUES (:profile_id, :name, :position )';
       $stm = self::$db->prepare($query);
       self::$db->beginTransaction();
-      $stm->execute( array('userId' => $userId, 'name' => $image['name'], 'position'=>$position) );
+      $stm->execute( array('profile_id' => $profile_id, 'name' => $image['name'], 'position'=>$position) );
       $imageId = self::$db->lastInsertId();
       self::$db->commit(); 
       return array($imageId, $image['name']);
@@ -156,11 +156,11 @@ class Users extends Model{
    /**
    * Borrado lógico de una imagen de la galería
    */
-  public static function deleteImage($id = false, $userId = false){
-    if($id === false || $userId === false){return false;}
-    $query = 'UPDATE user_gallery SET visible = 0 WHERE id = :id AND userId = :userId';
+  public static function deleteImage($id = false, $profile_id = false){
+    if($id === false || $profile_id === false){return false;}
+    $query = 'UPDATE user_gallery SET visible = 0 WHERE id = :id AND profile_id = :profile_id';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
+    $stm->execute(array( 'id'=>$id, 'profile_id'=>$profile_id ));
     return true;
   }
 
@@ -175,62 +175,62 @@ class Users extends Model{
   /**
    * Elije una imagen favorita
    */
-  public static function setFavoriteImage($id = false, $userId = false){
-    if($id === false || $userId === false){return false;}
+  public static function setFavoriteImage($id = false, $profile_id = false){
+    if($id === false || $profile_id === false){return false;}
     //quitar la otra imagen favorita si la hubiera
-    $query = 'UPDATE user_gallery SET favorite = 0 WHERE userId = :userId';
+    $query = 'UPDATE user_gallery SET favorite = 0 WHERE profile_id = :profile_id';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'userId'=>$userId )); 
+    $stm->execute(array( 'profile_id'=>$profile_id )); 
     //setear la nueva favorita
-    $query = 'UPDATE user_gallery SET favorite = 1 WHERE id = :id AND userId = :userId';
+    $query = 'UPDATE user_gallery SET favorite = 1 WHERE id = :id AND profile_id = :profile_id';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'id'=>$id, 'userId'=>$userId ));
+    $stm->execute(array( 'id'=>$id, 'profile_id'=>$profile_id ));
     return true;
   }
 
   /**
    * Añade/modifica la descripción de un usuario
    */
-  public static function setDescription($userId = false, $description = false){
-    if($description === false || $userId === false){return false;}
-    $query = 'INSERT INTO user_description (userId, description) VALUES (:userId, :description) ON duplicate KEY UPDATE description=:description2';
+  public static function setDescription($profile_id = false, $description = false){
+    if($description === false || $profile_id === false){return false;}
+    $query = 'INSERT INTO user_description (profile_id, description) VALUES (:profile_id, :description) ON duplicate KEY UPDATE description=:description2';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'userId'=>$userId, 'description'=>$description, 'description2'=>$description ));
+    $stm->execute(array( 'profile_id'=>$profile_id, 'description'=>$description, 'description2'=>$description ));
     return true;
   }
 
   /**
    * Añade/modifica el email de contacto de un usuario
    */
-  public static function setContactEmail($userId = false, $email = false){
-    if($email === false || $userId === false){return false;}
-    $query = 'INSERT INTO user_email (userId, email) VALUES (:userId, :email) ON duplicate KEY UPDATE email=:email2';
+  public static function setContactEmail($profile_id = false, $email = false){
+    if($email === false || $profile_id === false){return false;}
+    $query = 'INSERT INTO user_email (profile_id, email) VALUES (:profile_id, :email) ON duplicate KEY UPDATE email=:email2';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'userId'=>$userId, 'email'=>$email, 'email2'=>$email ));
+    $stm->execute(array( 'profile_id'=>$profile_id, 'email'=>$email, 'email2'=>$email ));
     return true;
   }
 
   /**
    * Añade/modifica métodos de pago aceptados por un usuario
    */
-  public static function setPaymentMethods($userId = false, $methods = false){
-    if($methods === false || $userId === false){return false;}
+  public static function setPaymentMethods($profile_id = false, $methods = false){
+    if($methods === false || $profile_id === false){return false;}
     $methods = implode(',', $methods);
-    $query = 'INSERT INTO user_payment_methods (userId, payment_methods) VALUES (:userId, :payment_methods) ON duplicate KEY UPDATE payment_methods=:payment_methods2';
+    $query = 'INSERT INTO user_payment_methods (profile_id, payment_methods) VALUES (:profile_id, :payment_methods) ON duplicate KEY UPDATE payment_methods=:payment_methods2';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'userId'=>$userId, 'payment_methods'=>$methods, 'payment_methods2'=>$methods ));
+    $stm->execute(array( 'profile_id'=>$profile_id, 'payment_methods'=>$methods, 'payment_methods2'=>$methods ));
     return true;
   }
 
   /**
    * Añade/modifica los filtros de un usuario
    */
-  public static function setFilters($userId = false, $filter_id = false, $sub_filters = false){
-    if($userId === false || $filter_id === false || $sub_filters === false){return false;}
+  public static function setFilters($profile_id = false, $filter_id = false, $sub_filters = false){
+    if($profile_id === false || $filter_id === false || $sub_filters === false){return false;}
     $sub_filters = implode(',', $sub_filters);
-    $query = 'INSERT INTO user_filters (userId, filter_id, sub_filters) VALUES (:userId, :filter_id, :sub_filters) ON duplicate KEY UPDATE sub_filters=:sub_filters2';
+    $query = 'INSERT INTO user_filters (profile_id, filter_id, sub_filters) VALUES (:profile_id, :filter_id, :sub_filters) ON duplicate KEY UPDATE sub_filters=:sub_filters2';
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'userId'=>$userId, 'filter_id'=>$filter_id, 'sub_filters'=>$subfilters, 'sub_filters2'=>$subfilters ));
+    $stm->execute(array( 'profile_id'=>$profile_id, 'filter_id'=>$filter_id, 'sub_filters'=>$subfilters, 'sub_filters2'=>$subfilters ));
     return true;
   }
 
@@ -243,33 +243,33 @@ class Users extends Model{
   /**
    * Devuelve las imágenes visibles en la galería de un usuario y por orden
    */
-  public static function getGalleryImages($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT id, name, position, favorite FROM user_gallery WHERE userId=:userId AND visible = 1 ORDER BY position ASC';
+  public static function getGalleryImages($profile_id = false){
+    if($profile_id === false || empty($profile_id)){return false;}
+    $query = 'SELECT id, name, position, favorite FROM user_gallery WHERE profile_id=:profile_id AND visible = 1 ORDER BY position ASC';
     $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
+    $stm->execute(array('profile_id'=>$profile_id));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
 
   /**
    * Devuelve la descripcion de un usuario
    */
-  public static function getDescription($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT description FROM user_description WHERE userId=:userId';
+  public static function getDescription($profile_id = false){
+    if($profile_id === false || empty($profile_id)){return false;}
+    $query = 'SELECT description FROM user_description WHERE profile_id=:profile_id';
     $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
+    $stm->execute(array('profile_id'=>$profile_id));
     return $response = $stm->fetch();
   }
 
    /**
    * Devuelve el email de contacto de un usuario
    */
-  public static function getContactEmail($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT email FROM user_email WHERE userId=:userId';
+  public static function getContactEmail($profile_id = false){
+    if($profile_id === false || empty($profile_id)){return false;}
+    $query = 'SELECT email FROM user_email WHERE profile_id=:profile_id';
     $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
+    $stm->execute(array('profile_id'=>$profile_id));
     return $response = $stm->fetch();
   }
 
@@ -289,22 +289,22 @@ class Users extends Model{
    * Obtiene todos los métodos de pago posibles
    * (Si no se especifica un idioma o no lo tenenos, se envía en el idioma por defecto de la web)
    */
-  public static function getUserPaymentMethods($userId = false){
-    if($userId === false){return false;}
-    $query = 'SELECT payment_methods FROM user_payment_methods WHERE userId = :userId';
+  public static function getUserPaymentMethods($profile_id = false){
+    if($profile_id === false){return false;}
+    $query = 'SELECT payment_methods FROM user_payment_methods WHERE profile_id = :profile_id';
     $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
+    $stm->execute(array('profile_id'=>$profile_id));
     return $stm->fetch();
   }
 
   /**
    * Devuelve todos los filtros de un usuario
    */
-  public static function getUserFilters($userId = false){
-    if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT filter_id, sub_filters FROM user_filters WHERE userId=:userId ORDER BY filter_id ASC';
+  public static function getUserFilters($profile_id = false){
+    if($profile_id === false || empty($profile_id)){return false;}
+    $query = 'SELECT filter_id, sub_filters FROM user_filters WHERE profile_id=:profile_id ORDER BY filter_id ASC';
     $stm = self::$db->prepare($query);
-    $stm->execute(array('userId'=>$userId));
+    $stm->execute(array('profile_id'=>$profile_id));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
 
