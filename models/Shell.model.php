@@ -83,9 +83,27 @@ class Shell extends Model{
    */
   public static function getFiltersAndSubfilters($lang = LANGS[0]){
     $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
-    $query = 'SELECT distinct filters.id as filter_id, filters.'.$search.' AS filter_name, sub_filters.id as sub_filter_id, sub_filters.'.$search.' AS sub_filter_name FROM filters, sub_filters WHERE filters.id = sub_filters.filter_id';
+    //$query = 'SELECT distinct filters.id as filter_id, filters.'.$search.' AS filter_name, sub_filters.id as sub_filter_id, sub_filters.'.$search.' AS sub_filter_name FROM filters, sub_filters WHERE filters.id = sub_filters.filter_id';
+    $query = "SELECT * from 
+    ((SELECT distinct filters.id as filter_id, filters.".$search." AS filter_name, sub_filters.id as sub_filter_id, sub_filters.".$search." AS sub_filter_name FROM filters, sub_filters WHERE filters.id = sub_filters.filter_id)
+    UNION
+    (SELECT a.id as filter_id, a.".$search." AS filter_name, '' as sub_filter_id, '' as sub_filter_name from filters a WHERE a.id NOT IN (SELECT distinct filter_id from sub_filters))) B
+    ORDER BY B.filter_id";
     $stm = self::$db->prepare($query);
     $stm->execute();
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+
+  /**
+   * Devuelve el id y nombre de un filtro y sus sub_filtros por filter_id
+   */
+  public static function getFilterAndSubfiltersByFilterId($lang = LANGS[0], $filter_id = false){
+    if($filter_id === false){return false;}
+    $search = (!in_array($lang, LANGS) ? LANGS[0] : $lang);
+    $query = 'SELECT distinct filters.id as filter_id, filters.'.$search.' AS filter_name, sub_filters.id as sub_filter_id, sub_filters.'.$search.' AS sub_filter_name FROM filters, sub_filters WHERE filters.id = :filter_id AND filters.id = sub_filters.filter_id';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('filter_id' => $filter_id));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
 
