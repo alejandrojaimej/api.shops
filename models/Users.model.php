@@ -307,6 +307,17 @@ class Users extends Model{
     $stm->execute(array('userId'=>$userId));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  /**
+   * Devuelve todos los perfiles de un usuario
+   */
+  public static function getUserProfiles($userId = false){
+    if($userId === false || empty($userId)){return false;}
+    $query = 'SELECT up.profile_id, pd.name, pd.surname, pd.mobile_phone FROM user_profiles up, profile_details pd WHERE up.userId=:userId AND pd.userId=:userId2 ORDER BY up.profile_id ASC';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array('userId'=>$userId, 'userId2'=>$userId));
+    return $stm->fetchAll(PDO::FETCH_ASSOC);
+  }
   
 }
 ?>
