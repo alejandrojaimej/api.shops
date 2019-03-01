@@ -170,6 +170,25 @@ $app->get('/getFiltersAndSubfilters/{lang}', function(Request $request, Response
 /**
  * Obtiene los perfiles de un usuario
  */
+$app->get('/getUserFilters/{profile_id}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Users');
+
+    $result = $model::getUserFilters($args['profile_id']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
+ * Obtiene los perfiles de un usuario
+ */
 $app->get('/getUserProfiles/{userId}', function(Request $request, Response $response, array $args){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
     $model = loadModel('Users');
