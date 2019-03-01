@@ -225,12 +225,30 @@ class Users extends Model{
   /**
    * Añade/modifica los filtros de un usuario
    */
-  public static function setFilters($profile_id = false, $filter_id = false, $sub_filters = false){
-    if($profile_id === false || $filter_id === false || $sub_filters === false){return false;}
-    $sub_filters = implode(',', $sub_filters);
+  public static function setFilters($profile_id = false, $filters = array()){
+    if($profile_id === false || empty($filters)){return false;}
+
     $query = 'INSERT INTO user_filters (profile_id, filter_id, sub_filters) VALUES (:profile_id, :filter_id, :sub_filters) ON duplicate KEY UPDATE sub_filters=:sub_filters2';
+    self::$db->beginTransaction();
     $stm = self::$db->prepare($query);
-    $stm->execute(array( 'profile_id'=>$profile_id, 'filter_id'=>$filter_id, 'sub_filters'=>$subfilters, 'sub_filters2'=>$subfilters ));
+    foreach($filters as $key => $value){
+      //ajustar los valores al formato de la db
+      if($key == 5){ //para la fecha de nacimiento
+        if($value['day']<10){
+          $value['day'] = '0'.$value['day'];
+        }
+        if($value['month']<10){
+          $value['month'] = '0'.$value['month'];
+        }
+        $value = implode('-', $value);
+      }else if($key == 7){//para las características
+        $value = implode(',', $value);
+      }
+
+      //añadir los insert a la transaction
+      $stm->execute(array( 'profile_id'=>$profile_id, 'filter_id'=>$key, 'sub_filters'=>$value, 'sub_filters2'=>$value ));      
+    }
+    self::$db->commit();   
     return true;
   }
 

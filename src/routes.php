@@ -360,6 +360,20 @@ $app->post('/setContactEmail', function(Request $request, Response $response){
     ->withStatus(200);  
 });
 
+
+$app->post('/setFilters', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+    $result = $users::setFilters($request->getParam("profile_id"), $request->getParam('filters') );
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
 /**
  * Inserta/modifica los métods de pago aceptados por un usuario
  */
