@@ -266,8 +266,7 @@ class Users extends Model{
       $profile_id = self::$db->lastInsertId();
       self::$db->commit(); 
     }
-    
-    $query = 'INSERT INTO profile_details (profile_id, name, surname, mobile_phone) VALUES (:profile_id, :name, :surname, :phone) ON duplicate KEY UPDATE name=:name2, surname=:surname2, mobile_phone:phone2';
+    $query = 'INSERT INTO profile_details (profile_id, name, surname, mobile_phone) VALUES (:profile_id, :name, :surname, :phone) ON DUPLICATE KEY UPDATE name=:name2, surname=:surname2, mobile_phone=:phone2';
     $stm = self::$db->prepare($query);
     $stm->execute(array( 'profile_id'=>$profile_id, 'name'=>$name, 'surname'=>$surname, 'phone'=>$phone, 'name2'=>$name, 'surname2'=>$surname, 'phone2'=>$phone ));
     return true;
