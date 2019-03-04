@@ -414,6 +414,25 @@ $app->post('/setPaymentMethods', function(Request $request, Response $response){
 
 
 /**
+ * Inserta/modifica un nuevo perfil de usuario
+ */
+$app->post('/setProfile', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Users');
+
+    $result = $users::setProfile($request->getParam("userId"), $request->getParam("profile_id"), $request->getParam("name"), $request->getParam('surname'), $request->getParam('phone') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
  *   METODOS PUT
  */
 
