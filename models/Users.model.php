@@ -256,7 +256,7 @@ class Users extends Model{
    * Añade/modifica un perfil de usuario
    */
   public static function setProfile($userId = false, $profile_id = false, $name = false, $surname = false, $phone = false){
-    if($methods === false || $profile_id === false || $name === false || $surname === false || $phone === false){return false;}
+    if($userId === false || $profile_id === false || $name === false || $surname === false || $phone === false){return false;}
 
     if($profile_id != 0){
       $query = 'INSERT INTO user_profiles (userId) VALUES (:userId)';
