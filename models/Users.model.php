@@ -252,6 +252,27 @@ class Users extends Model{
     return true;
   }
 
+   /**
+   * Añade/modifica un perfil de usuario
+   */
+  public static function setProfile($userId = false, $profile_id = false, $name = false, $surname = false, $phone = false){
+    if($methods === false || $profile_id === false || $name === false || $surname === false || $phone === false){return false;}
+
+    if($profile_id != 0){
+      $query = 'INSERT INTO user_profiles (userId) VALUES (userId)';
+      $stm = self::$db->prepare($query);
+      self::$db->beginTransaction();
+      $stm->execute( array('userId' => $userId) );
+      $profile_id = self::$db->lastInsertId();
+      self::$db->commit(); 
+    }
+    
+    $query = 'INSERT INTO profile_details (profile_id, name, surname, mobile_phone) VALUES (:profile_id, :name, :surname, :phone) ON duplicate KEY UPDATE name=:name2, surname=:surname2, mobile_phone:phone2';
+    $stm = self::$db->prepare($query);
+    $stm->execute(array( 'profile_id'=>$profile_id, 'name'=>$name, 'surname'=>$surname, 'phone'=>$phone, 'name2'=>$name, 'surname2'=>$surname, 'phone2'=>$phone ));
+    return true;
+  }
+
   /**
    *  ***********************************
    *  ************* GETTERS *************
