@@ -259,7 +259,7 @@ class Users extends Model{
     if($methods === false || $profile_id === false || $name === false || $surname === false || $phone === false){return false;}
 
     if($profile_id != 0){
-      $query = 'INSERT INTO user_profiles (userId) VALUES (userId)';
+      $query = 'INSERT INTO user_profiles (userId) VALUES (:userId)';
       $stm = self::$db->prepare($query);
       self::$db->beginTransaction();
       $stm->execute( array('userId' => $userId) );
