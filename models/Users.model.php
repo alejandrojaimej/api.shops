@@ -258,7 +258,7 @@ class Users extends Model{
   public static function setProfile($userId = false, $profile_id = false, $name = false, $surname = false, $phone = false){
     if($userId === false || $profile_id === false || $name === false || $surname === false || $phone === false){return false;}
 
-    if($profile_id != 0){
+    if($profile_id == 0){
       $query = 'INSERT INTO user_profiles (profile_id, userId) VALUES (NULL, :userId)';
       $stm = self::$db->prepare($query);
       self::$db->beginTransaction();
