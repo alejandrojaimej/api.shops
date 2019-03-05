@@ -207,6 +207,25 @@ $app->get('/getUserProfiles/{userId}', function(Request $request, Response $resp
 
 
 /**
+ * Obtiene todos los productos
+ */
+$app->get('/getAllProducts/{lang}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Products');
+
+    $result = $model::getAllProducts($args['lang']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
  *   METODOS POST
  */
 
