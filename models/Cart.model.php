@@ -30,11 +30,11 @@ class Cart extends Model{
         $result[$product['product_id']]['product_id'] = $product['product_id'];
         $result[$product['product_id']]['quantity'] = $product['quantity'];
         $result[$product['product_id']]['date_added'] = $product['date_added'];
-        $result[$product['product_id']]['image'] = $$product_details['image'];
-        $result[$product['product_id']]['price'] = $$product_details['price'];
-        $result[$product['product_id']]['title'] = $$product_details['title'];
-        $result[$product['product_id']]['subtitle'] = $$product_details['subtitle'];
-        $result[$product['product_id']]['description'] = $$product_details['description'];
+        $result[$product['product_id']]['image'] = $product_details['image'];
+        $result[$product['product_id']]['price'] = $product_details['price'];
+        $result[$product['product_id']]['title'] = $product_details['title'];
+        $result[$product['product_id']]['subtitle'] = $product_details['subtitle'];
+        $result[$product['product_id']]['description'] = $product_details['description'];
     }
 
     return $result;
