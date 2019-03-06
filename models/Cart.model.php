@@ -18,22 +18,23 @@ class Cart extends Model{
     $result = array();
 
     //formar un array con los datos relevantes de los productos en el carrito para pintarlos en la view
-    foreach($producst as $key => $value){
+    foreach($products as $product){
         //obtener los detalles de cada producto en funcion del idioma actual
         $query = 'SELECT p.image, p.price, pt.'.$lang.' AS title, ps.'.$lang.' as subtitle, pd.'.$lang.' as description FROM products p, products_title pt, products_subtitle ps, products_description pd WHERE p.id = :product_id AND pt.product_id = p.id AND ps.product_id = p.id AND pd.product_id = p.id';
-        $stm->execute( array('product_id'=>$key) );
+        $stm = self::$db->prepare($query);
+        $stm->execute( array('product_id'=>$product['product_id']) );
         $product_details = $stm->fetch(PDO::FETCH_ASSOC);
 
         //formar el array
-        $result[$key] = array();
-        $result[$key]['product_id'] = $value['product_id'];
-        $result[$key]['quantity'] = $value['quantity'];
-        $result[$key]['date_added'] = $value['date_added'];
-        $result[$key]['image'] = $$product_details['image'];
-        $result[$key]['price'] = $$product_details['price'];
-        $result[$key]['title'] = $$product_details['title'];
-        $result[$key]['subtitle'] = $$product_details['subtitle'];
-        $result[$key]['description'] = $$product_details['description'];
+        $result[$product['product_id']] = array();
+        $result[$product['product_id']]['product_id'] = $product['product_id'];
+        $result[$product['product_id']]['quantity'] = $product['quantity'];
+        $result[$product['product_id']]['date_added'] = $product['date_added'];
+        $result[$product['product_id']]['image'] = $$product_details['image'];
+        $result[$product['product_id']]['price'] = $$product_details['price'];
+        $result[$product['product_id']]['title'] = $$product_details['title'];
+        $result[$product['product_id']]['subtitle'] = $$product_details['subtitle'];
+        $result[$product['product_id']]['description'] = $$product_details['description'];
     }
 
     return $result;
