@@ -13,10 +13,11 @@ class Cart extends Model{
     $query = 'SELECT products FROM user_cart WHERE userId = :userId';
     $stm = self::$db->prepare($query);
     $stm->execute( array('userId'=>$userId) );
-    $products = $stm->fetch();
+    $products = $stm->fetch(PDO::FETCH_ASSOC);
+    return $products;
     if($products){$products = json_decode($products, true);}
 
-    return $products;
+   
     $result = array();
 
     //formar un array con los datos relevantes de los productos en el carrito para pintarlos en la view
