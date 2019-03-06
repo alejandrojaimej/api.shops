@@ -45,7 +45,7 @@ class Cart extends Model{
    */
   public static function setCart($userId = false, $products = false){
     if($userId === false || $products === false){ return false; }
-    $query = 'INSERT INTO user_cart (id, userId, products) VALUES (NULL, :userID, :products) ON duplicate KEY UPDATE products = :products2';
+    $query = 'INSERT INTO user_cart (id, userId, products) VALUES (NULL, :userId, :products) ON duplicate KEY UPDATE products = :products2';
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=> $userId, 'products'=>$products, 'products2'=>$products));
     return true;
