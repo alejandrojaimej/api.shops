@@ -26,7 +26,7 @@ class Cart extends Model{
 
         //formar el array
         $result[$key] = array();
-        $result[$key]['product_id'] = $key;
+        $result[$key]['product_id'] = $value['product_id'];
         $result[$key]['quantity'] = $value['quantity'];
         $result[$key]['date_added'] = $value['date_added'];
         $result[$key]['image'] = $$product_details['image'];
