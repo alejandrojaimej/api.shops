@@ -15,8 +15,6 @@ class Cart extends Model{
     $stm->execute( array('userId'=>$userId) );
     $products = $stm->fetch(PDO::FETCH_ASSOC);
     if($products){$products = json_decode($products['products'], true);}  
-
-    return $products;
     $result = array();
 
     //formar un array con los datos relevantes de los productos en el carrito para pintarlos en la view
@@ -24,7 +22,7 @@ class Cart extends Model{
         //obtener los detalles de cada producto en funcion del idioma actual
         $query = 'SELECT p.image, p.price, pt.'.$lang.' AS title, ps.'.$lang.' as subtitle, pd.'.$lang.' as description FROM products p, products_title pt, products_subtitle ps, products_description pd WHERE p.id = :product_id AND pt.product_id = p.id AND ps.product_id = p.id AND pd.product_id = p.id';
         $stm->execute( array('product_id'=>$key) );
-        $product_details = $stm->fetch();
+        $product_details = $stm->fetch(PDO::FETCH_ASSOC);
 
         //formar el array
         $result[$key] = array();
