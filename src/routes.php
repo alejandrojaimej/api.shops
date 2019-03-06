@@ -226,6 +226,25 @@ $app->get('/getAllProducts/{lang}', function(Request $request, Response $respons
 });
 
 /**
+ * Obtiene el carrito del usuario
+ */
+$app->get('/getCart/{lang}/{userId}', function(Request $request, Response $response, array $args){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $model = loadModel('Cart');
+
+    $result = $model::getCart($args['lang'], $args['userId']);
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result; 
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+/**
  *   METODOS POST
  */
 
@@ -440,6 +459,26 @@ $app->post('/setProfile', function(Request $request, Response $response){
     $users = loadModel('Users');
 
     $result = $users::setProfile($request->getParam("userId"), $request->getParam("profile_id"), $request->getParam("name"), $request->getParam('surname'), $request->getParam('phone') );
+
+    $response_data = array();
+    $response_data['error'] = false; 
+    $response_data['response'] = $result;
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);  
+});
+
+
+/**
+ * Inserta/modifica un nuevo carrito de la compra
+ */
+$app->post('/setCart', function(Request $request, Response $response){
+    $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
+    $users = loadModel('Cart');
+
+    $result = $users::setCart($request->getParam("userId"), $request->getParam("products"));
 
     $response_data = array();
     $response_data['error'] = false; 
