@@ -47,7 +47,10 @@ class Cart extends Model{
     if($userId === false || $products === false){ return false; }
     $query = 'INSERT INTO user_cart (id, userId, products) VALUES (NULL, :userId, :products) ON duplicate KEY UPDATE products = :products2';
     $stm = self::$db->prepare($query);
+    self::$db->beginTransaction();
     $stm->execute(array('userId'=> $userId, 'products'=>$products, 'products2'=>$products));
+    $cart_id = self::$db->lastInsertId();
+    self::$db->commit(); 
     return true;
   }
 
