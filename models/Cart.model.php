@@ -15,6 +15,8 @@ class Cart extends Model{
     $stm->execute( array('userId'=>$userId) );
     $products = $stm->fetch();
     if($products){$products = json_decode($products, true);}
+
+    return $products;
     $result = array();
 
     //formar un array con los datos relevantes de los productos en el carrito para pintarlos en la view
