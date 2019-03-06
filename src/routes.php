@@ -476,9 +476,9 @@ $app->post('/setProfile', function(Request $request, Response $response){
  */
 $app->post('/setCart', function(Request $request, Response $response){
     $resp = auth($request, $response);if($resp != 'valid'){return $resp;}
-    $users = loadModel('Cart');
+    $cart = loadModel('Cart');
 
-    $result = $users::setCart($request->getParam("userId"), $request->getParam("products"));
+    $result = $cart::setCart($request->getParam("userId"), $request->getParam("products"));
 
     $response_data = array();
     $response_data['error'] = false; 
