@@ -3,3 +3,5 @@
 /vendor
 vendor/palanik/corsslim
 vendor/*
+/core/.privateGlobals.php
+core/.privateGlobals.php
