@@ -351,7 +351,7 @@ class Users extends Model{
    */
   public static function getUserProfiles($userId = false){
     if($userId === false || empty($userId)){return false;}
-    $query = 'SELECT up.profile_id, pd.name, pd.surname, pd.mobile_phone FROM user_profiles up, profile_details pd WHERE up.userId=:userId AND pd.profile_id IN (SELECT profile_id FROM user_profiles WHERE userId=:userId2) ORDER BY up.profile_id ASC';
+    $query = 'SELECT DISTINCT up.profile_id, pd.name, pd.surname, pd.mobile_phone FROM user_profiles up, profile_details pd WHERE up.userId=:userId AND pd.profile_id = up.profile_id AND pd.profile_id IN (SELECT DISTINCT profile_id FROM user_profiles WHERE userId=:userId2) ORDER BY up.profile_id ASC';
     $stm = self::$db->prepare($query);
     $stm->execute(array('userId'=>$userId, 'userId2'=>$userId));
     return $stm->fetchAll(PDO::FETCH_ASSOC);
