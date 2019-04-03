@@ -1,12 +1,20 @@
 <?php 
 require_once('.privateGlobals.php');
-defined('BASE_ROUTE') or define('BASE_ROUTE', '/var/www/html/api.mk1');
+
+defined('DEBUG') or define('DEBUG', true);
+if(DEBUG){
+    defined('BASE_ROUTE') or define('BASE_ROUTE', __DIR__ . '/../');
+}else{
+    defined('BASE_ROUTE') or define('BASE_ROUTE', '/var/www/html/api.mk1');
+}
+
+
 defined('SITE_VERSION') or define('SITE_VERSION', '1.0');
 
 defined('LANGS') or define('LANGS', ['es', 'en', 'zh']);
 
 defined('BASEDIR') or define('BASEDIR', __DIR__);
-defined('DOMAIN') or define('DOMAIN', $_SERVER['SERVER_NAME']);
+defined('DOMAIN') or define('DOMAIN', (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost'));
 defined('BASEURL') or define('BASEURL', 'http'.(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '').'://'.DOMAIN);
 defined('CORE_FOLDER') or define('CORE_FOLDER', BASE_ROUTE.DIRECTORY_SEPARATOR.'core');
 defined('MODELS_FOLDER') or define('MODELS_FOLDER', BASE_ROUTE.DIRECTORY_SEPARATOR.'models');

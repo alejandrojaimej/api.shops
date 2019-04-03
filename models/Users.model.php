@@ -213,8 +213,8 @@ class Users extends Model{
   /**
    * Añade/modifica métodos de pago aceptados por un usuario
    */
-  public static function setPaymentMethods($profile_id = false, $methods = false){
-    if($methods === false || $profile_id === false){return false;}
+  public static function setPaymentMethods($profile_id = false, $methods = []){
+    if(empty($methods) || $profile_id === false){return false;}
     $methods = implode(',', $methods);
     $query = 'INSERT INTO user_payment_methods (profile_id, payment_methods) VALUES (:profile_id, :payment_methods) ON duplicate KEY UPDATE payment_methods=:payment_methods2';
     $stm = self::$db->prepare($query);

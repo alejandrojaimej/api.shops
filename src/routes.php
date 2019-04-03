@@ -5,6 +5,9 @@ use Slim\Http\Response;
 
 // Routes
 
+require_once __DIR__ . '/../core/globals.php';
+$DEFAULT_LANG = LANGS[0];
+require_once __DIR__ . '/../core/functions.php';
 
 /**
  *   METODOS GET
